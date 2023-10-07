@@ -1,6 +1,7 @@
+from django.contrib.auth import get_user_model
 from rest_framework import viewsets
-from home.models import Items,Items,Items
-from .serializers import ItemsSerializer,ItemsSerializer,ItemsSerializer
+from home.models import Items
+from .serializers import ItemsSerializer
 from rest_framework import authentication
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.viewsets import ModelViewSet, ViewSet
@@ -12,6 +13,7 @@ from home.api.v1.serializers import (
     UserSerializer,
 )
 
+User = get_user_model()
 
 class SignupViewSet(ModelViewSet):
     serializer_class = SignupSerializer
@@ -37,3 +39,9 @@ class ItemsViewSet(viewsets.ModelViewSet):
     serializer_class = ItemsSerializer
     authentication_classes = (authentication.SessionAuthentication, authentication.TokenAuthentication)
     queryset = Items.objects.all()
+
+
+class UserViewSet(ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    http_method_names = ['get', 'delete']
