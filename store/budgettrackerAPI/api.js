@@ -32,6 +32,15 @@ function api_v1_login_create(payload) {
 function api_v1_signup_create(payload) {
   return budgettrackerAPI.post(`/api/v1/signup/`, payload)
 }
+function api_v1_users_list(payload) {
+  return budgettrackerAPI.get(`/api/v1/users/`)
+}
+function api_v1_users_retrieve(payload) {
+  return budgettrackerAPI.get(`/api/v1/users/${payload.id}/`)
+}
+function api_v1_users_destroy(payload) {
+  return budgettrackerAPI.delete(`/api/v1/users/${payload.id}/`)
+}
 function rest_auth_login_create(payload) {
   return budgettrackerAPI.post(`/rest-auth/login/`, payload)
 }
@@ -75,6 +84,9 @@ export const apiService = {
   api_v1_items_destroy,
   api_v1_login_create,
   api_v1_signup_create,
+  api_v1_users_list,
+  api_v1_users_retrieve,
+  api_v1_users_destroy,
   rest_auth_login_create,
   rest_auth_logout_create,
   rest_auth_password_change_create,
