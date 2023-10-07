@@ -28,8 +28,8 @@ const WelcomeScreen = () => {
   return <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Total Cost: 1000</Text>
       <View style={styles.buttonContainer}>
-        <Button title="Item List" onPress={() => {}} />
-        <Button title="Add User" onPress={() => {}} />
+        <Button title="Item List" onPress={() => {}} color="#000" />
+        <Button title="Add User" onPress={() => {}} color="#000" />
       </View>
       <FlatList data={users} renderItem={({
       item
