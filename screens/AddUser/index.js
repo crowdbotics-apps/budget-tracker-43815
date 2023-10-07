@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { SafeAreaView, View, Text, TextInput, Button, FlatList, StyleSheet } from "react-native";
 
 const UserCard = ({
   name,
@@ -10,11 +10,9 @@ const UserCard = ({
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.phone}>{phone}</Text>
     </View>
-    <TouchableOpacity onPress={onDelete}>
-      <Image style={styles.icon} source={{
-      uri: "https://tinyurl.com/42evm3m3"
-    }} />
-    </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+              <Button title="Delete" color="#E3242B" onPress={() => console.log("Delete")} />
+            </View>
   </View>;
 
 const AddUser = () => {
