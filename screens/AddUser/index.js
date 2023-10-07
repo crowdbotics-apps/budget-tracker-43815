@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, Text, TextInput, Button, FlatList, StyleSheet } from "react-native";
+import { useDispatch } from "react-redux";
 
 const UserCard = ({
   name,
@@ -10,9 +11,9 @@ const UserCard = ({
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.phone}>{phone}</Text>
     </View>
-      <View style={styles.buttonContainer}>
-              <Button title="Delete" color="#E3242B" onPress={() => console.log("Delete")} />
-            </View>
+    <View style={styles.buttonContainer}>
+      <Button title="Delete" color="#E3242B" onPress={() => console.log("Delete")} />
+    </View>
   </View>;
 
 const AddUser = () => {
@@ -48,6 +49,7 @@ const AddUser = () => {
     setUsers(users.filter(user => user.phone !== phone));
   };
 
+  const dispatch = useDispatch();
   return <SafeAreaView style={styles.container}>
       <FlatList data={users} keyExtractor={item => item.phone} renderItem={({
       item

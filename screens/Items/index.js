@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, Button, SafeAreaView, StyleSheet, TextInput } from "react-native";
 
-const Items = () => {
+const Items = ({
+  route
+}) => {
+  const {} = route.params || {};
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const data = [{
