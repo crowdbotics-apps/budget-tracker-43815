@@ -1,66 +1,79 @@
-import React, { useState } from "react";
-import { SafeAreaView, View, Text, TextInput, Button, FlatList, StyleSheet } from "react-native";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react"
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TextInput,
+  Button,
+  FlatList,
+  StyleSheet
+} from "react-native"
+import { useDispatch, useSelector } from "react-redux"
+import { api_v1_users_list } from "../../store/budgettrackerAPI/users.slice.js"
 
-const UserCard = ({
-  name,
-  phone,
-  onDelete
-}) => <View style={styles.card}>
+const UserCard = ({ name, email, onDelete }) => (
+  <View style={styles.card}>
     <View style={styles.textContainer}>
       <Text style={styles.name}>{name}</Text>
-      <Text style={styles.phone}>{phone}</Text>
+      <Text style={styles.phone}>{email}</Text>
     </View>
     <View style={styles.buttonContainer}>
-      <Button title="Delete" color="#E3242B" onPress={() => console.log("Delete")} />
+      <Button title="Delete" color="#E3242B" onPress={onDelete} />
     </View>
-  </View>;
+  </View>
+)
 
 const AddUser = () => {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [users, setUsers] = useState([{
-    name: "John Doe",
-    phone: "123-456-7890"
-  }, {
-    name: "Jane Doe",
-    phone: "098-765-4321"
-  }, {
-    name: "Alice Smith",
-    phone: "111-222-3333"
-  }, {
-    name: "Bob Johnson",
-    phone: "444-555-6666"
-  }, {
-    name: "Charlie Brown",
-    phone: "777-888-9999"
-  }]);
+  const [name, setName] = useState("")
+  const [phone, setPhone] = useState("")
+
 
   const addUser = () => {
-    setUsers([...users, {
-      name,
-      phone
-    }]);
-    setName("");
-    setPhone("");
-  };
+   
+  }
 
-  const deleteUser = phone => {
-    setUsers(users.filter(user => user.phone !== phone));
-  };
+  const deleteUser = id => {
 
-  const dispatch = useDispatch();
-  return <SafeAreaView style={styles.container}>
-      <FlatList data={users} keyExtractor={item => item.phone} renderItem={({
-      item
-    }) => <UserCard name={item.name} phone={item.phone} onDelete={() => deleteUser(item.phone)} />} />
+  }
+  const dispatch = useDispatch()
+
+  const { entities } = useSelector(state => state.Users)
+
+  useEffect(() => {
+    dispatch(api_v1_users_list())
+  }, [])
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <FlatList
+        data={entities}
+        keyExtractor={item => item.phone}
+        renderItem={({ item }) => (
+          <UserCard
+            name={item.name}
+            email={item.email}
+            onDelete={() => deleteUser(item.id)}
+          />
+        )}
+      />
       <View style={styles.form}>
-        <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Name" />
-        <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="Phone" />
+        <TextInput
+          style={styles.input}
+          value={name}
+          onChangeText={setName}
+          placeholder="Name"
+        />
+        <TextInput
+          style={styles.input}
+          value={phone}
+          onChangeText={setPhone}
+          placeholder="Phone"
+        />
         <Button title="Add" onPress={addUser} color="#000" />
       </View>
-    </SafeAreaView>;
-};
+    </SafeAreaView>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -110,5 +123,5 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20
   }
-});
-export default AddUser;
+})
+export default AddUser
