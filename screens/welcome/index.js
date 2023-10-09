@@ -1,54 +1,86 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { View, Text, Button, FlatList, SafeAreaView, StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { api_v1_users_list } from "../../store/budgettrackerAPI/users.slice.js";
+import { budgetconnector_get_api_v1_items_list } from "../../store/budgetConnector/budgetconnector_response_get_Listitems.slice.js";
 
-const WelcomeScreen = () => {
-  const users = [{
-    name: "User 1",
-    pendingAmount: "100"
-  }, {
-    name: "User 2",
-    pendingAmount: "200"
-  }, {
-    name: "User 3",
-    pendingAmount: "300"
-  }];
-  const expenses = [{
-    month: "January",
-    persons: "3",
-    cost: "300"
-  }, {
-    month: "February",
-    persons: "2",
-    cost: "200"
-  }, {
-    month: "March",
-    persons: "4",
-    cost: "400"
-  }];
+const WelcomeScreen = ({navigation}) => {
+
+  const dispatch = useDispatch()
+  const {
+    entities: itemList
+  } = useSelector(state => state.Budgetconnector_response_get_Listitems);
+
+  const {
+    entities: users
+  } = useSelector(state => state.Users);
+
+  const totalPrice = itemList && itemList?.reduce((accumulator, currentItem) => {
+    const itemPrice = parseFloat(currentItem.price);
+    return accumulator + itemPrice;
+  }, 0);
+  
+  const indivisualPrice = Math.round(totalPrice/users?.length)
+
+// Group objects by the month they were created
+const groupedData = itemList && itemList.reduce((groups, item) => {
+  const month = item?.created_at?.substring(0, 7); // Extract the year and month (YYYY-MM)
+  if (!groups[month]) {
+    groups[month] = [];
+  }
+  groups[month].push(item);
+  return groups;
+}, {});
+
+// Calculate the total price for each group and create a new array
+const totalExpenses = Object.keys(groupedData).map((month) => {
+  const items = groupedData[month];
+  const total = items.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
+  return { month, total };
+});
+
+
+// Array of month names
+const monthNames = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+
+// Function to convert date to month word
+function getMonthWord(dateString) {
+  const date = new Date(dateString);
+  const monthIndex = date.getMonth();
+  return monthNames[monthIndex];
+}
+
+  useEffect(() => {
+    dispatch(api_v1_users_list());
+    dispatch(budgetconnector_get_api_v1_items_list());
+  }, []);
   return <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Total Cost: 1000</Text>
+      <Text style={styles.title}>Total Cost: {totalPrice}</Text>
       <View style={styles.buttonContainer}>
-        <Button title="Item List" onPress={() => {}} color="#000" />
-        <Button title="Add User" onPress={() => {}} color="#000" />
+        <Button title="Item List" onPress={() => navigation.navigate("Items")} color="#000" />
+        <Button title="Add User" onPress={() => navigation.navigate("AddUser")} color="#000" />
       </View>
       <FlatList data={users} renderItem={({
       item
     }) => <View style={styles.card}>
             <Text style={styles.cardText}>{item.name}</Text>
             <Text style={styles.cardText}>
-              Pending Amount: {item.pendingAmount}
+              Pending Amount: {indivisualPrice}
             </Text>
           </View>} keyExtractor={item => item.name} />
       <View style={styles.table}>
         <View style={styles.row}>
           <Text style={styles.tableHeader}>Month</Text>
-          <Text style={styles.tableHeader}>Persons</Text>
+          {/* <Text style={styles.tableHeader}>Persons</Text> */}
           <Text style={styles.tableHeader}>Cost</Text>
         </View>
-        {expenses.map(expense => <View style={styles.row} key={expense.month}>
-            <Text style={styles.cell}>{expense.month}</Text>
-            <Text style={styles.cell}>{expense.persons}</Text>
-            <Text style={styles.cell}>{expense.cost}</Text>
+        {totalExpenses && totalExpenses.map(expense => <View style={styles.row} key={expense.month}>
+            <Text style={styles.cell}>{getMonthWord(expense.month)}</Text>
+            {/* <Text style={styles.cell}>{expense.persons}</Text> */}
+            <Text style={styles.cell}>{expense.total}</Text>
           </View>)}
       </View>
     </SafeAreaView>;

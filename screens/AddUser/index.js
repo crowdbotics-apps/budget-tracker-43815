@@ -56,7 +56,7 @@ const AddUser = () => {
     }) => <UserCard name={item.name} email={item.email} onDelete={() => deleteUser(item.id)} />} />
       <View style={styles.form}>
         <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Name" />
-        <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="Phone" />
+        <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="Email" />
 
         <Pressable style={styles.addButtonStyles} onPress={addUser} disabled={name && phone ? false : true}>
           <Text style={styles.addButtonTitle}>Add</Text>

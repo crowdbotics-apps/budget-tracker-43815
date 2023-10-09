@@ -4,7 +4,7 @@ import { budgetconnector_get_api_v1_items_list } from "../../store/budgetConnect
 import { useDispatch, useSelector } from "react-redux";
 import { budgetconnector_delete_api_v1_items_id_delete } from "../../store/budgetConnector/budgetconnector_response_patch_Updateitems.slice.js";
 import { budgetconnector_post_api_v1_items_create } from "../../store/budgetConnector/budgetconnector_response_post_Createitems.slice.js";
-
+import moment from "moment"
 const Items = ({
   route
 }) => {
@@ -27,10 +27,12 @@ const Items = ({
     });
   };
 
-  const addUser = () => {
+
+  const addItem = () => {
     dispatch(budgetconnector_post_api_v1_items_create({
       name,
-      price
+      price,
+      created_at: moment(new Date()).format("YYYY-MM-DD")
     })).then(() => {
       dispatch(budgetconnector_get_api_v1_items_list());
       setName("");
@@ -51,7 +53,7 @@ const Items = ({
       <View style={styles.form}>
         <TextInput style={styles.input} placeholder="Item Name" value={name} onChangeText={setName} />
         <TextInput style={styles.input} placeholder="Price" value={price} onChangeText={setPrice} />
-        <Button title="Add" color="black" onPress={addUser} disabled={name && price ? false : true} />
+        <Button title="Add" color="black" onPress={addItem} disabled={name && price ? false : true} />
       </View>
     </SafeAreaView>;
 };
