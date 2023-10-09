@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { SafeAreaView, View, Text, TextInput, Button, FlatList, StyleSheet, Pressable } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { api_v1_users_list } from "../../store/budgettrackerAPI/users.slice.js";
-
+import { budgetconnector_post_api_v1_signup_create } from "../../store/budgetConnector/budgetconnector_response_post_CreateUsers.slice.js";
+import { budgetconnector_delete_api_v1_users_id_delete } from "../../store/budgetConnector/budgetconnector_response_get_Getuserdetails.slice.js";
 const UserCard = ({
   name,
   email,
@@ -21,11 +22,28 @@ const AddUser = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
 
-  const addUser = () => {};
-
-  const deleteUser = id => {};
-
   const dispatch = useDispatch();
+
+  const addUser = () => {
+    dispatch(budgetconnector_post_api_v1_signup_create({
+      name,
+      email: phone,
+      password: "Pass@123"
+    })).then(() => {
+      dispatch(api_v1_users_list());
+      setName("")
+      setPhone("")
+    })
+  };
+
+  const deleteUser = id => {
+    dispatch(budgetconnector_delete_api_v1_users_id_delete({
+     id 
+    })).then(() => {
+      dispatch(api_v1_users_list());
+    })
+  };
+
   const {
     entities
   } = useSelector(state => state.Users);
@@ -40,7 +58,7 @@ const AddUser = () => {
         <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Name" />
         <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="Phone" />
 
-        <Pressable style={styles.addButtonStyles}>
+        <Pressable style={styles.addButtonStyles} onPress={addUser} disabled={name && phone ? false: true}>
           <Text style={styles.addButtonTitle}>Add</Text>
         </Pressable>
       </View>
