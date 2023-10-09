@@ -24,11 +24,15 @@ const WelcomeScreen = ({navigation}) => {
 
 // Group objects by the month they were created
 const groupedData = itemList && itemList.reduce((groups, item) => {
-  const month = item?.created_at?.substring(0, 7); // Extract the year and month (YYYY-MM)
-  if (!groups[month]) {
-    groups[month] = [];
+  const createdDate = new Date(item.created_at);
+const year = createdDate.getUTCFullYear();
+const month = createdDate.getUTCMonth() + 1; // Adding 1 to get the month as 1-based index
+
+const yyyyMM = `${year}-${month.toString().padStart(2, '0')}`;
+  if (!groups[yyyyMM]) {
+    groups[yyyyMM] = [];
   }
-  groups[month].push(item);
+  groups[yyyyMM].push(item);
   return groups;
 }, {});
 
