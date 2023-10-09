@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { api_v1_users_list } from "../../store/budgettrackerAPI/users.slice.js";
 import { budgetconnector_post_api_v1_signup_create } from "../../store/budgetConnector/budgetconnector_response_post_CreateUsers.slice.js";
 import { budgetconnector_delete_api_v1_users_id_delete } from "../../store/budgetConnector/budgetconnector_response_get_Getuserdetails.slice.js";
+
 const UserCard = ({
   name,
   email,
@@ -21,7 +22,6 @@ const UserCard = ({
 const AddUser = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-
   const dispatch = useDispatch();
 
   const addUser = () => {
@@ -31,17 +31,17 @@ const AddUser = () => {
       password: "Pass@123"
     })).then(() => {
       dispatch(api_v1_users_list());
-      setName("")
-      setPhone("")
-    })
+      setName("");
+      setPhone("");
+    });
   };
 
   const deleteUser = id => {
     dispatch(budgetconnector_delete_api_v1_users_id_delete({
-     id 
+      id
     })).then(() => {
       dispatch(api_v1_users_list());
-    })
+    });
   };
 
   const {
@@ -58,7 +58,7 @@ const AddUser = () => {
         <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Name" />
         <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="Phone" />
 
-        <Pressable style={styles.addButtonStyles} onPress={addUser} disabled={name && phone ? false: true}>
+        <Pressable style={styles.addButtonStyles} onPress={addUser} disabled={name && phone ? false : true}>
           <Text style={styles.addButtonTitle}>Add</Text>
         </Pressable>
       </View>

@@ -4,6 +4,7 @@ import { budgetconnector_get_api_v1_items_list } from "../../store/budgetConnect
 import { useDispatch, useSelector } from "react-redux";
 import { budgetconnector_delete_api_v1_items_id_delete } from "../../store/budgetConnector/budgetconnector_response_patch_Updateitems.slice.js";
 import { budgetconnector_post_api_v1_items_create } from "../../store/budgetConnector/budgetconnector_response_post_Createitems.slice.js";
+
 const Items = ({
   route
 }) => {
@@ -18,26 +19,25 @@ const Items = ({
     dispatch(budgetconnector_get_api_v1_items_list());
   }, []);
 
-
-
   const deleteItem = id => {
     dispatch(budgetconnector_delete_api_v1_items_id_delete({
-     id 
+      id
     })).then(() => {
       dispatch(budgetconnector_get_api_v1_items_list());
-    })
+    });
   };
 
   const addUser = () => {
     dispatch(budgetconnector_post_api_v1_items_create({
       name,
-      price,
+      price
     })).then(() => {
       dispatch(budgetconnector_get_api_v1_items_list());
-      setName("")
-      setPrice("")
-    })
+      setName("");
+      setPrice("");
+    });
   };
+
   return <SafeAreaView style={styles.container}>
       <View style={styles.table}>
         {entities?.map((item, index) => <View key={index} style={styles.row}>
@@ -51,7 +51,7 @@ const Items = ({
       <View style={styles.form}>
         <TextInput style={styles.input} placeholder="Item Name" value={name} onChangeText={setName} />
         <TextInput style={styles.input} placeholder="Price" value={price} onChangeText={setPrice} />
-        <Button title="Add" color="black" onPress={addUser} disabled={name && price ? false: true} />
+        <Button title="Add" color="black" onPress={addUser} disabled={name && price ? false : true} />
       </View>
     </SafeAreaView>;
 };
