@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Button, SafeAreaView, StyleSheet, TextInput } from "react-native";
 import { budgetconnector_get_api_v1_items_list } from "../../store/budgetConnector/budgetconnector_response_get_Listitems.slice.js";
 import { useDispatch, useSelector } from "react-redux";
-
+import { budgetconnector_delete_api_v1_items_id_delete } from "../../store/budgetConnector/budgetconnector_response_patch_Updateitems.slice.js";
+import { budgetconnector_post_api_v1_items_create } from "../../store/budgetConnector/budgetconnector_response_post_Createitems.slice.js";
 const Items = ({
   route
 }) => {
@@ -16,20 +17,41 @@ const Items = ({
   useEffect(() => {
     dispatch(budgetconnector_get_api_v1_items_list());
   }, []);
+
+
+
+  const deleteItem = id => {
+    dispatch(budgetconnector_delete_api_v1_items_id_delete({
+     id 
+    })).then(() => {
+      dispatch(budgetconnector_get_api_v1_items_list());
+    })
+  };
+
+  const addUser = () => {
+    dispatch(budgetconnector_post_api_v1_items_create({
+      name,
+      price,
+    })).then(() => {
+      dispatch(budgetconnector_get_api_v1_items_list());
+      setName("")
+      setPrice("")
+    })
+  };
   return <SafeAreaView style={styles.container}>
       <View style={styles.table}>
         {entities?.map((item, index) => <View key={index} style={styles.row}>
             <Text style={styles.cell}>{item.name}</Text>
             <Text style={styles.cell}>{item.price}</Text>
             <View style={styles.buttonContainer}>
-              <Button title="Delete" color="#E3242B" onPress={() => console.log("Delete")} />
+              <Button title="Delete" color="#E3242B" onPress={() => deleteItem(item?.id)} />
             </View>
           </View>)}
       </View>
       <View style={styles.form}>
         <TextInput style={styles.input} placeholder="Item Name" value={name} onChangeText={setName} />
         <TextInput style={styles.input} placeholder="Price" value={price} onChangeText={setPrice} />
-        <Button title="Add" color="black" onPress={() => console.log("Add")} />
+        <Button title="Add" color="black" onPress={addUser} disabled={name && price ? false: true} />
       </View>
     </SafeAreaView>;
 };
