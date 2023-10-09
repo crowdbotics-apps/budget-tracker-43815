@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, SafeAreaView, StyleSheet, TextInput } from "react-native";
-import { budgetconnector_get_api_v1_items_list } from "../../store/budgetConnector/budgetconnector_response_get_Listitems.slice.js"
-import { useDispatch, useSelector } from "react-redux"
+import { budgetconnector_get_api_v1_items_list } from "../../store/budgetConnector/budgetconnector_response_get_Listitems.slice.js";
+import { useDispatch, useSelector } from "react-redux";
 
 const Items = ({
   route
@@ -9,14 +9,13 @@ const Items = ({
   const {} = route.params || {};
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-
-  const {entities}  = useSelector(state => state.Budgetconnector_response_get_Listitems)
-    
-  const dispatch = useDispatch()
+  const {
+    entities
+  } = useSelector(state => state.Budgetconnector_response_get_Listitems);
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(budgetconnector_get_api_v1_items_list())
-  }, [])
-
+    dispatch(budgetconnector_get_api_v1_items_list());
+  }, []);
   return <SafeAreaView style={styles.container}>
       <View style={styles.table}>
         {entities?.map((item, index) => <View key={index} style={styles.row}>

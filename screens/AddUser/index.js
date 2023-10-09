@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from "react"
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  Button,
-  FlatList,
-  StyleSheet,
-  Pressable
-} from "react-native"
-import { useDispatch, useSelector } from "react-redux"
-import { api_v1_users_list } from "../../store/budgettrackerAPI/users.slice.js"
+import React, { useState, useEffect } from "react";
+import { SafeAreaView, View, Text, TextInput, Button, FlatList, StyleSheet, Pressable } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { api_v1_users_list } from "../../store/budgettrackerAPI/users.slice.js";
 
-const UserCard = ({ name, email, onDelete }) => (
-  <View style={styles.card}>
+const UserCard = ({
+  name,
+  email,
+  onDelete
+}) => <View style={styles.card}>
     <View style={styles.textContainer}>
       <Text style={styles.name}>{name}</Text>
       <Text style={styles.phone}>{email}</Text>
@@ -21,76 +15,52 @@ const UserCard = ({ name, email, onDelete }) => (
     <View style={styles.buttonContainer}>
       <Button title="Delete" color="#E3242B" onPress={onDelete} />
     </View>
-  </View>
-)
+  </View>;
 
 const AddUser = () => {
-  const [name, setName] = useState("")
-  const [phone, setPhone] = useState("")
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
 
+  const addUser = () => {};
 
-  const addUser = () => {
-   
-  }
+  const deleteUser = id => {};
 
-  const deleteUser = id => {
-
-  }
-  const dispatch = useDispatch()
-
-  const { entities } = useSelector(state => state.Users)
-
+  const dispatch = useDispatch();
+  const {
+    entities
+  } = useSelector(state => state.Users);
   useEffect(() => {
-    dispatch(api_v1_users_list())
-  }, [])
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={entities}
-        keyExtractor={item => item.phone}
-        renderItem={({ item }) => (
-          <UserCard
-            name={item.name}
-            email={item.email}
-            onDelete={() => deleteUser(item.id)}
-          />
-        )}
-      />
+    dispatch(api_v1_users_list());
+  }, []);
+  return <SafeAreaView style={styles.container}>
+      <FlatList data={entities} keyExtractor={item => item.phone} renderItem={({
+      item
+    }) => <UserCard name={item.name} email={item.email} onDelete={() => deleteUser(item.id)} />} />
       <View style={styles.form}>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-          placeholder="Name"
-        />
-        <TextInput
-          style={styles.input}
-          value={phone}
-          onChangeText={setPhone}
-          placeholder="Phone"
-        />
+        <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Name" />
+        <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="Phone" />
 
         <Pressable style={styles.addButtonStyles}>
-          <Text style={styles.addButtonTitle}>
-            Add
-          </Text>
+          <Text style={styles.addButtonTitle}>Add</Text>
         </Pressable>
       </View>
-    </SafeAreaView>
-  )
-}
+    </SafeAreaView>;
+};
 
 const styles = StyleSheet.create({
-  addButtonTitle: {fontWeight:'700',
-     color:'#fff',
-     fontSize:16,  },
-  addButtonStyles: {marginHorizontal:20,
-     backgroundColor:'#000',
-     borderRadius:5,
-     justifyContent:'center',
-     alignItems:'center',
-     paddingVertical:10 ,  },
+  addButtonTitle: {
+    fontWeight: "700",
+    color: "#fff",
+    fontSize: 16
+  },
+  addButtonStyles: {
+    marginHorizontal: 20,
+    backgroundColor: "#000",
+    borderRadius: 5,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 10
+  },
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5"
@@ -137,6 +107,9 @@ const styles = StyleSheet.create({
   icon: {
     width: 20,
     height: 20
+  },
+  SBCoIlGo: {
+    position: "absolute"
   }
-})
-export default AddUser
+});
+export default AddUser;
