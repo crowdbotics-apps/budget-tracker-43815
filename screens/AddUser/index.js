@@ -6,7 +6,8 @@ import {
   TextInput,
   Button,
   FlatList,
-  StyleSheet
+  StyleSheet,
+  Pressable
 } from "react-native"
 import { useDispatch, useSelector } from "react-redux"
 import { api_v1_users_list } from "../../store/budgettrackerAPI/users.slice.js"
@@ -69,13 +70,27 @@ const AddUser = () => {
           onChangeText={setPhone}
           placeholder="Phone"
         />
-        <Button title="Add" onPress={addUser} color="#000" />
+
+        <Pressable style={styles.addButtonStyles}>
+          <Text style={styles.addButtonTitle}>
+            Add
+          </Text>
+        </Pressable>
       </View>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  addButtonTitle: {fontWeight:'700',
+     color:'#fff',
+     fontSize:16,  },
+  addButtonStyles: {marginHorizontal:20,
+     backgroundColor:'#000',
+     borderRadius:5,
+     justifyContent:'center',
+     alignItems:'center',
+     paddingVertical:10 ,  },
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5"
