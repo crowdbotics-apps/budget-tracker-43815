@@ -1,61 +1,56 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { View, Text, Button, FlatList, SafeAreaView, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { api_v1_users_list } from "../../store/budgettrackerAPI/users.slice.js";
 import { budgetconnector_get_api_v1_items_list } from "../../store/budgetConnector/budgetconnector_response_get_Listitems.slice.js";
 
-const WelcomeScreen = ({navigation}) => {
-
-  const dispatch = useDispatch()
+const WelcomeScreen = ({
+  navigation
+}) => {
+  const dispatch = useDispatch();
   const {
     entities: itemList
   } = useSelector(state => state.Budgetconnector_response_get_Listitems);
-
   const {
     entities: users
   } = useSelector(state => state.Users);
-
   const totalPrice = itemList && itemList?.reduce((accumulator, currentItem) => {
     const itemPrice = parseFloat(currentItem.price);
     return accumulator + itemPrice;
   }, 0);
-  
-  const indivisualPrice = Math.round(totalPrice/users?.length)
+  const indivisualPrice = Math.round(totalPrice / users?.length); // Group objects by the month they were created
 
-// Group objects by the month they were created
-const groupedData = itemList && itemList.reduce((groups, item) => {
-  const createdDate = new Date(item.created_at);
-const year = createdDate.getUTCFullYear();
-const month = createdDate.getUTCMonth() + 1; // Adding 1 to get the month as 1-based index
+  const groupedData = itemList && itemList.reduce((groups, item) => {
+    const createdDate = new Date(item.created_at);
+    const year = createdDate.getUTCFullYear();
+    const month = createdDate.getUTCMonth() + 1; // Adding 1 to get the month as 1-based index
 
-const yyyyMM = `${year}-${month.toString().padStart(2, '0')}`;
-  if (!groups[yyyyMM]) {
-    groups[yyyyMM] = [];
+    const yyyyMM = `${year}-${month.toString().padStart(2, '0')}`;
+
+    if (!groups[yyyyMM]) {
+      groups[yyyyMM] = [];
+    }
+
+    groups[yyyyMM].push(item);
+    return groups;
+  }, {}); // Calculate the total price for each group and create a new array
+
+  const totalExpenses = Object.keys(groupedData).map(month => {
+    const items = groupedData[month];
+    const total = items.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
+    return {
+      month,
+      total
+    };
+  }); // Array of month names
+
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; // Function to convert date to month word
+
+  function getMonthWord(dateString) {
+    const date = new Date(dateString);
+    const monthIndex = date.getMonth();
+    return monthNames[monthIndex];
   }
-  groups[yyyyMM].push(item);
-  return groups;
-}, {});
-
-// Calculate the total price for each group and create a new array
-const totalExpenses = Object.keys(groupedData).map((month) => {
-  const items = groupedData[month];
-  const total = items.reduce((acc, curr) => acc + parseFloat(curr.price), 0);
-  return { month, total };
-});
-
-
-// Array of month names
-const monthNames = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
-];
-
-// Function to convert date to month word
-function getMonthWord(dateString) {
-  const date = new Date(dateString);
-  const monthIndex = date.getMonth();
-  return monthNames[monthIndex];
-}
 
   useEffect(() => {
     dispatch(api_v1_users_list());
@@ -78,12 +73,16 @@ function getMonthWord(dateString) {
       <View style={styles.table}>
         <View style={styles.row}>
           <Text style={styles.tableHeader}>Month</Text>
-          {/* <Text style={styles.tableHeader}>Persons</Text> */}
+          {
+          /* <Text style={styles.tableHeader}>Persons</Text> */
+        }
           <Text style={styles.tableHeader}>Cost</Text>
         </View>
         {totalExpenses && totalExpenses.map(expense => <View style={styles.row} key={expense.month}>
             <Text style={styles.cell}>{getMonthWord(expense.month)}</Text>
-            {/* <Text style={styles.cell}>{expense.persons}</Text> */}
+            {
+          /* <Text style={styles.cell}>{expense.persons}</Text> */
+        }
             <Text style={styles.cell}>{expense.total}</Text>
           </View>)}
       </View>

@@ -4,7 +4,8 @@ import { budgetconnector_get_api_v1_items_list } from "../../store/budgetConnect
 import { useDispatch, useSelector } from "react-redux";
 import { budgetconnector_delete_api_v1_items_id_delete } from "../../store/budgetConnector/budgetconnector_response_patch_Updateitems.slice.js";
 import { budgetconnector_post_api_v1_items_create } from "../../store/budgetConnector/budgetconnector_response_post_Createitems.slice.js";
-import moment from "moment"
+import moment from "moment";
+
 const Items = ({
   route
 }) => {
@@ -26,7 +27,6 @@ const Items = ({
       dispatch(budgetconnector_get_api_v1_items_list());
     });
   };
-
 
   const addItem = () => {
     dispatch(budgetconnector_post_api_v1_items_create({
